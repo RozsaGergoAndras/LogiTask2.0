@@ -24,7 +24,14 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        $task = Task::where('worker', $user->id)->
+                        whereNot('state', 2)
+                        ->first();
+        if($task == null){
+            return response()->json(["success" => false,'error' => 'No assigned task for worker!'], 404);
+        }
+        return response()->json(["success" => true, 'task' => $task], 200);
     }
 
     /**

@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\ApiAccessLog;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Api_access_log;
 
 class LogApiAccess
 {
@@ -23,7 +24,7 @@ class LogApiAccess
         $userId = $user ? $user->id : null; // Get user ID if authenticated, else null
 
         // Log the access data
-        ApiAccessLog::create([
+        Api_Access_Log::create([
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'route' => $request->path(),

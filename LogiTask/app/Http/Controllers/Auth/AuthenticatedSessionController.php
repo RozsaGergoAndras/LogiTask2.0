@@ -8,33 +8,79 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
+     * Handle login for API and return a token.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
+    {
+        // Validate
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Check credentials
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            //generate API token
+            $user = Auth::user();
+            $token = $user->createToken('LogiTask')->plainTextToken;
+
+            // Return token and user information
+            return response()->json([
+                'token' => $token,
+                'user' => $user
+            ], 200);
+        }
+
+        //authentication fails, return error
+        return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+
+    /**
+     * Handle logout and revoke the user's token.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request)
+    {
+        // Revoke the current user's token
+        $request->user()->tokens->each(function ($token) {
+            $token->delete();
+        });
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
+    /**
      * Display the login view.
      */
-    public function create(): View
+    /*public function create(): View
     {
         return view('auth.login');
-    }
+    }*/
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    /*public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
-    }
-
+    }*/
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    /*public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
@@ -43,5 +89,5 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
-    }
+    }*/
 }
