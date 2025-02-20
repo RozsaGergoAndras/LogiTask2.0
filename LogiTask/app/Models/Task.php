@@ -30,12 +30,12 @@ class Task extends Model
         return $this->belongsTo(Task_type::class, 'task_type');
     }
 
-    public function user()
+    public function assigner()
     {
         return $this->belongsTo(User::class, 'assigner');
     }
 
-    public function user1()
+    public function worker()
     {
         return $this->belongsTo(User::class, 'worker');
     }

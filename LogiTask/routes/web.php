@@ -19,8 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//API route
 Route::middleware('auth')->middleware([LogApiAccess::class])->group(function () {
-    Route::get('/api/task', [Task::class, 'show'])->name('task.show');
+    Route::get('/api/task/{id}', [Task::class, 'show'])->name('task.show');
     Route::post('/api/task/{id}', [Task::class, 'update'])->name('task.update');
 });
 
