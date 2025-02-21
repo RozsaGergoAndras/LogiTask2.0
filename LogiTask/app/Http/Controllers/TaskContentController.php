@@ -167,7 +167,7 @@ class TaskContentController extends Controller
         // Generate a signed URL that expires in 5 minutes
         $filePath = 'uploads/' . $filename;
 
-        if (!Storage::exists($filePath)) {
+        if (!Storage::disk('local')->exists($filePath)) {
             return response()->json(['error' => 'File not found'], 404);
         }
 

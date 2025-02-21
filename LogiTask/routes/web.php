@@ -31,15 +31,15 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::post('/api/file/upload', [TaskTypeController::class, 'uploadFile']);
     //Route::get('/api/file/download/{filename}', [TaskTypeController::class, 'downloadFile']); //LEGACY
     Route::get('/api/file/signed-url/{filename}', [TaskTypeController::class, 'getSignedUrl']);
+
+    //userdata
+    Route::get('/user', function (Request $request) {
+        return $request->user(); // For getting the authenticated user info
+    });
 });
 
+//API Lonin-out
 Route::post('/api/login', [AuthenticatedSessionController::class, 'store']); // For logging in and getting a token
-//userdata
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user(); // For getting the authenticated user info
-});
- 
-//API Logout
 Route::middleware('auth:sanctum')->post('/api/logout', [AuthenticatedSessionController::class, 'destroy']);
 
 
