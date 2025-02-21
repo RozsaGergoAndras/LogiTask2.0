@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\Task;
+use Hash;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -28,7 +30,36 @@ class AuthenticatedSessionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function store(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Find the user by email
+        $user = User::where('email', $request->email)->first();
+
+        // Check if the user exists and the password matches
+        if ($user && Hash::check($request->password, $user->password)) {
+            // Create an API token for the user
+            $token = $user->createToken('API Token')->plainTextToken;
+
+            // Return the token in the response
+            return response()->json(['success'=>true, 'token' => $token], 200);
+        }
+        if($this->UserHasActiveTask($user)){
+            $user->user_state = 3;  //beosztott
+        }
+        else{
+            $user->user_state = 2;  //szabad
+        }
+
+        return response()->json(['success'=>false, 'error' => 'Unauthorized'], 401);
+    }
+     
+    /*public function store(Request $request)
     {
         // Validate
         $request->validate([
@@ -57,7 +88,7 @@ class AuthenticatedSessionController extends Controller
 
         //authentication fails, return error
         return response()->json(['message' => 'Invalid credentials'], 401);
-    }
+    }*/
 
     /**
      * Handle logout and revoke the user's token.
