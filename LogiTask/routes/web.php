@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskTypeController;
 use App\Http\Middleware\LogApiAccess;
 use App\Models\Task;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +24,13 @@ Route::middleware('auth')->group(function () {
 
 //API route
 Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(function () {
-    Route::get('/api/task/', [Task::class, 'index'])->name('task.index');
-    Route::get('/api/task/{id}', [Task::class, 'show'])->name('task.show');
-    Route::post('/api/task/{id}', [Task::class, 'update'])->name('task.update');
+    Route::get('/api/task/', [TaskController::class, 'index'])->name('task.index');
+    Route::get('/api/task/{id}', [TaskController::class, 'show'])->name('task.show');
+    Route::post('/api/task/{id}', [TaskController::class, 'update'])->name('task.update');
+
+    Route::post('/api/file/upload', [TaskTypeController::class, 'uploadFile']);
+    //Route::get('/api/file/download/{filename}', [TaskTypeController::class, 'downloadFile']); //LEGACY
+    Route::get('/api/file/signed-url/{filename}', [TaskTypeController::class, 'getSignedUrl']);
 });
 
 Route::post('/api/login', [AuthenticatedSessionController::class, 'store']); // For logging in and getting a token
