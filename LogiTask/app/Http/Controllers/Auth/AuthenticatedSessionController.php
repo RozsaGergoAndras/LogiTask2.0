@@ -4,14 +4,24 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\TaskDistributionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\Task;
 
 class AuthenticatedSessionController extends Controller
 {
+    protected $taskService;
+
+    // Inject the service into the constructor
+    public function __construct(TaskDistributionService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
     /**
      * Handle login for API and return a token.
      *
@@ -31,6 +41,12 @@ class AuthenticatedSessionController extends Controller
             //generate API token
             $user = Auth::user();
             $token = $user->createToken('LogiTask')->plainTextToken;
+            if($this->UserHasActiveTask($user)){
+                $user->user_state = 3;  //beosztott
+            }
+            else{
+                $user->user_state = 2;  //szabad
+            }
 
             // Return token and user information
             return response()->json([
@@ -51,6 +67,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
+        $user = Auth::user();
+        $user->user_state = 1;
+        $user->save();
+
         // Revoke the current user's token
         $request->user()->tokens->each(function ($token) {
             $token->delete();
@@ -90,4 +110,9 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }*/
+
+    public function UserHasActiveTask($user){
+        $tasks = Task::where('worker',$user->id)->whereNot('state', 2);
+        return !$tasks->isEmpty();
+    }
 }
