@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('real_name')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
             //Kapcsolatok
             $table->foreign('role')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('user_state')->references('id')->on('user_states')->onDelete('cascade');

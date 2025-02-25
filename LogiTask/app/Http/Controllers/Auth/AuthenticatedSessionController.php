@@ -99,6 +99,10 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         $user = Auth::user();
+        if($user == null){
+            return response()->json(['success'=>false, 'message' => 'Invalid Token', 400]);
+        }
+
         $user->user_state = 1;
         $user->save();
 
@@ -107,7 +111,7 @@ class AuthenticatedSessionController extends Controller
             $token->delete();
         });
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return response()->json(['success'=>true, 'message' => 'Logged out successfully']);
     }
     /**
      * Display the login view.

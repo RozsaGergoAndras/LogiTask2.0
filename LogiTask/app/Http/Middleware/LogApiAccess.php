@@ -20,7 +20,8 @@ class LogApiAccess
     public function handle(Request $request, Closure $next)
     {
         // Log API access
-        $user = Auth::user(); // Get the authenticated user
+        //$user = Auth::user(); // Get the authenticated user
+        $user = $request->user();//TODO: User null????
         $userId = $user ? $user->id : null; // Get user ID if authenticated, else null
 
         // Log the access data
