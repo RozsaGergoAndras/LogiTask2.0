@@ -24,7 +24,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        //$user = Auth::user();
+        $user = auth('sanctum')->user();
         $task = Task::where('worker', $user->id)->
                         whereNot('state', 2)
                         ->first();
@@ -56,10 +57,11 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::find($id);
+        $user = $user = auth('sanctum')->user();
         if($task == null){
             return response()->json(["success" => false,'error' => 'Requested task not found!'], 404);
         }
-        if($task->assigner() != Auth::user() && $task->Worker() && Auth::user()->role()->role_name != 'Manager'){
+        if($task->assigner() != $user && $task->Worker() && $user->role()->role_name != 'Manager'){
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
         return response()->json(["success" => true, 'task' => $task], 200);
@@ -79,12 +81,12 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         $task = Task::find($id);
-
+        $user = $user = auth('sanctum')->user();
         //return errors
         if (!$task) {
             return response()->json(["success" => false, 'error' => 'Task not found'], 404);
         }
-        if($task->assigner() != Auth::user() && $task->Worker() && Auth::user()->role()->role_name != 'Manager'){
+        if($task->assigner() != $user && $task->Worker() && $user->role()->role_name != 'Manager'){
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
 

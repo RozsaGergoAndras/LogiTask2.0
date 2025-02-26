@@ -46,16 +46,18 @@ class AuthenticatedSessionController extends Controller
             // Create an API token for the user
             $token = $user->createToken('API Token')->plainTextToken;
 
+            if($this->UserHasActiveTask($user)){
+                $user->user_state = 3;  //beosztott
+                $user->save();
+            }
+            else{
+                $user->user_state = 2;  //szabad
+                $user->save();
+            }
+
             // Return the token in the response
             return response()->json(['success'=>true, 'token' => $token], 200);
         }
-        if($this->UserHasActiveTask($user)){
-            $user->user_state = 3;  //beosztott
-        }
-        else{
-            $user->user_state = 2;  //szabad
-        }
-
         return response()->json(['success'=>false, 'error' => 'Unauthorized'], 401);
     }
      
@@ -147,7 +149,7 @@ class AuthenticatedSessionController extends Controller
     }*/
 
     public function UserHasActiveTask($user){
-        $tasks = Task::where('worker',$user->id)->whereNot('state', 2);
+        $tasks = Task::where('worker',$user->id)->whereNot('state', 2)->get();
         return !$tasks->isEmpty();
     }
 }
