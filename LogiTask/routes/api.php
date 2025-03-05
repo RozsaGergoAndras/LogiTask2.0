@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskContentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskTypeController;
 use App\Http\Middleware\LogApiAccess;
@@ -15,9 +16,9 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::post('/task/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::post('/task/create', [TaskController::class, 'store'])->name('task.store');
 
-    Route::post('/file/upload', [TaskTypeController::class, 'uploadFile']);
-    //Route::get('/api/file/download/{filename}', [TaskTypeController::class, 'downloadFile']); //LEGACY
-    Route::get('/file/signed-url/{filename}', [TaskTypeController::class, 'getSignedUrl']);
+    Route::post('/file/upload', [TaskContentController::class, 'uploadFile']);
+    //Route::get('/api/file/download/{filename}', [TaskContentController::class, 'downloadFile']); //LEGACY
+    Route::get('/file/signed-url/{filename}', [TaskContentController::class, 'getSignedUrl']);
 
     //userdata
     Route::get('/user', function (Request $request) {

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('assigner');
-            $table->unsignedBigInteger('worker');
+            $table->unsignedBigInteger('worker')->nullable();
             $table->integer('state');
             $table->timestamp('state0date')->nullable();
             $table->timestamp('state1date')->nullable();

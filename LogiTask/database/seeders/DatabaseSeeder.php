@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,    // Seed roles first
             UserStateSeeder::class,    // Seed users_states after roles
+            TaskTypeSeeder::class,
         ]);
 
         User::factory()->create([

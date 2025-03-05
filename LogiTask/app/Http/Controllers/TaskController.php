@@ -7,7 +7,7 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Services\TaskDistributionService;
 use Auth;
-use Request;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -46,9 +46,34 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTaskRequest $request)
+    public function store(Request $request)
     {
-        //
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'assigner' => 'required|exists:users,id',
+            'worker' => 'nullable|exists:users,id',
+            'state' => 'required|integer',
+            'task_type' => 'required|exists:task_types,id',
+            'description' => 'required|string|max:255',
+        ]);
+
+        // Create a new task using the validated data
+        $task = Task::create([
+            'assigner' => $validated['assigner'],
+            'worker' => $validated['worker'],
+            'state' => $validated['state'],
+            'state0date' => now(),
+            'state1date' => null,
+            'state2date' => null,
+            'task_type' => $validated['task_type'],
+            'description' => $validated['description'],
+        ]);
+
+        // Return a success response
+        return response()->json([
+            'message' => 'Task created successfully!',
+            'task' => $task
+        ], 201);
     }
 
     /**
