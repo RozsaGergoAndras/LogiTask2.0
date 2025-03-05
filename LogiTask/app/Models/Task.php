@@ -39,4 +39,8 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'worker');
     }
+
+    public function taskContent(){
+        return $this->hasMany(Task_content::class);
+    }
 }

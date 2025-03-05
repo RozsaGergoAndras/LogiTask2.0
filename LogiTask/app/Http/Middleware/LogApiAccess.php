@@ -21,7 +21,7 @@ class LogApiAccess
     {
         // Log API access
         //$user = Auth::user(); // Get the authenticated user
-        //$user = $request->user();//TODO: User null????
+        //$user = $request->user();
         $user = auth('sanctum')->user();
         $userId = $user ? $user->id : null; // Get user ID if authenticated, else null
 
