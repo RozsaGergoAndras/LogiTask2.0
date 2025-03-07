@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\User;
 use App\Services\TaskDistributionService;
 use Auth;
 use Illuminate\Http\Request;
@@ -86,7 +87,7 @@ class TaskController extends Controller
         if($task == null){
             return response()->json(["success" => false,'error' => 'Requested task not found!'], 404);
         }
-        if($task->assigner() != $user && $task->Worker() && $user->role()->role_name != 'Manager'){
+        if($task->assigner != $user->id && $task->Worker != $user->id && $user->role != 1){
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
         return response()->json(["success" => true, 'task' => $task, 'taskContent'=> $task->taskContent()], 200);
@@ -112,7 +113,7 @@ class TaskController extends Controller
         if (!$task) {
             return response()->json(["success" => false, 'error' => 'Task not found'], 404);
         }
-        if($task->assigner() != $user && $task->Worker() && $user->role != 1){
+        if($task->assigner != $user->id && $task->Worker != $user->id && $user->role != 1){
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
 
@@ -132,7 +133,8 @@ class TaskController extends Controller
             $task->state = 2;
             $task->state2date = now();
             //free resource
-            $worker = $task->worker();
+            $workerid = $task->worker;
+            $worker = User::find($workerid);
             if($worker->user_state != 1){
                 $worker->user_state = 2;
                 $worker->update();
