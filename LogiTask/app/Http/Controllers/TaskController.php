@@ -152,7 +152,7 @@ class TaskController extends Controller
         $task->update();
 
         // Return the updated task in the response
-        return response()->json(['task' => $task], 200);
+        return response()->json(["success" => true, 'task' => $task], 200);
     }
 
     /**
