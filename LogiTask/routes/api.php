@@ -16,6 +16,12 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::post('/task/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::post('/task/create', [TaskController::class, 'store'])->name('task.store');
 
+    Route::get('/tasktype', [TaskTypeController::class, 'index']);
+    Route::get('/tasktype/{id}', [TaskTypeController::class, 'show']);
+    Route::post('/tasktype/{id}', [TaskTypeController::class, 'update']);
+    Route::post('/tasktype/create', [TaskTypeController::class, 'store']);
+    Route::delete('/tasktype/{id}', [TaskTypeController::class, 'destroy']);
+
     Route::post('/file/upload', [TaskContentController::class, 'uploadFile']);
     //Route::get('/api/file/download/{filename}', [TaskContentController::class, 'downloadFile']); //LEGACY
     Route::get('/file/signed-url/{filename}', [TaskContentController::class, 'getSignedUrl']);
