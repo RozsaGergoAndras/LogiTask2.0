@@ -7,7 +7,7 @@ use App\Http\Controllers\TaskTypeController;
 use App\Http\Middleware\LogApiAccess;
 use App\Models\Task;
 use Illuminate\Support\Facades\Route;
-
+/*
 Route::get('/', function () {
     return view('welcome');
 });
@@ -26,3 +26,4 @@ Route::middleware('auth')->group(function () {
 
 
 require __DIR__.'/auth.php';
+*/

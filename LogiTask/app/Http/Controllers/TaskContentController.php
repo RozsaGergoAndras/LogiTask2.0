@@ -76,7 +76,7 @@ class TaskContentController extends Controller
         // Validation for the uploaded file
         $validator = Validator::make($request->all(), [
             'file' => 'required|file|mimes:jpg,png,pdf,docx,txt,zip,rar|max:2048',
-            'taskId' =>'required|integer|min:1',
+            'taskId' =>'required|integer|exists:tasks,id',
         ]);
 
         if ($validator->fails()) {

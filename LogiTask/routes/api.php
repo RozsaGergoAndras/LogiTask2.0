@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Regger;
 use App\Http\Controllers\TaskContentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskTypeController;
@@ -28,8 +30,10 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
 
     //userdata
     Route::get('/user', function (Request $request) {
-        return $request->user(); // For getting the authenticated user info
+        return auth('sanctum')->user(); // For getting the authenticated user info
     });
+
+    Route::post('/user/create', [Regger::class, 'store']);
 });
 
 //API Lonin-out
