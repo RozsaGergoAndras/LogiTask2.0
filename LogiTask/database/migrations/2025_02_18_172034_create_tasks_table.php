@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('state0date')->nullable();
             $table->timestamp('state1date')->nullable();
             $table->timestamp('state2date')->nullable();
+            $table->string('result')->nullable();
             $table->unsignedBigInteger('task_type');
             $table->string('description');
             $table->SoftDeletes();

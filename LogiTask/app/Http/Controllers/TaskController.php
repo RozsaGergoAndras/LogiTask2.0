@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\TaskDistributionService;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
@@ -117,12 +118,15 @@ class TaskController extends Controller
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
 
-        // Validate the request data
-        /*$validated = $request->validate([
-            'title' => 'required|string|max:255', // example validation rules
-            'description' => 'nullable|string',   // modify according to your model
-            'status' => 'required|in:pending,completed', // example of status field
-        ]);*/
+        try {
+            $request->validate([
+                'result' => 'nullable|string|max:25'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(["success" => false,'error' => $e->getMessage()], 400);
+        }
+        
+
         if($task->state == 0)
         {
             $task->state = 1;
@@ -132,6 +136,8 @@ class TaskController extends Controller
         {
             $task->state = 2;
             $task->state2date = now();
+            $task->result = $request->result;
+
             //free resource
             $workerid = $task->worker;
             $worker = User::find($workerid);
