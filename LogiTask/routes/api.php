@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Regger;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\TaskContentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskTypeController;
@@ -34,6 +35,16 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     });
     
     Route::post('/user/create', [Regger::class, 'store']);
+
+
+    Route::get('/statistics/worker/compleated-task', [StatisticsController::class, 'GetWorkerActivity']);
+    Route::get('/statistics/worker/avg-work-time', [StatisticsController::class, 'GetWorkerActivityByTime']);
+    Route::get('/statistics/task/avg-task-time', [StatisticsController::class, 'GetAverageCompletionTime']);
+    Route::get('/statistics/task/avg-task-time-by-type', [StatisticsController::class, 'GetAverageTaskCompletionTime']);
+    Route::get('/statistics/task/task-count-by-role', [StatisticsController::class, 'GetTaskCountByRole']);
+    Route::get('/statistics/api/most-active-api-users', [StatisticsController::class, 'GetMostActiveApiUsers']);
+    Route::get('/statistics/api/usage', [StatisticsController::class, 'GetApiUsage']);
+    Route::get('/statistics/api/requests', [StatisticsController::class, 'GetMostRequestedRoute']);
 });
 
 //API Lonin-out
