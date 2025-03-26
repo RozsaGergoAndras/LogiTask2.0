@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class TaskContentController extends Controller
 {
@@ -65,11 +66,26 @@ class TaskContentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task_content $task_content)
+    public function destroy(Request $request)
     {
-        //
-    }
+        try {
+            $request->validate([
+                'id'=>'required|exists:task_contents,id'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(["success" => false, 'error'=>$e->getMessage()], 400);
+        }
+        
+        $content = Task_content::find($request->id);
+        $path = 'uploads/'. $content->link;
+        
+        if (Storage::exists($path)) {
+            Storage::delete($path);
+        }
 
+        $content->delete();
+        return response()->json(["success" => true, 'message'=>'Content deleted successfuly, file removed.'], 200);
+    }
 
     public function uploadFile(Request $request)
     {

@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Regger;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\TaskContentController;
 use App\Http\Controllers\TaskController;
@@ -24,6 +25,13 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::post('/tasktype/{id}', [TaskTypeController::class, 'update']);
     Route::post('/tasktype/create', [TaskTypeController::class, 'store']);
     Route::delete('/tasktype/{id}', [TaskTypeController::class, 'destroy']);
+
+    //Route::get('/taskcontent/{id}', [TaskTypeController::class, 'index']);
+    Route::delete('/taskcontent/{id}', [TaskContentController::class, 'destroy']);
+
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/roles/create', [RoleController::class, 'store']);
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
 
     Route::post('/file/upload', [TaskContentController::class, 'uploadFile']);
     //Route::get('/api/file/download/{filename}', [TaskContentController::class, 'downloadFile']); //LEGACY
