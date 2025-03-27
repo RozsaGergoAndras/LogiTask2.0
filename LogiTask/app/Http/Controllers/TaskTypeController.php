@@ -6,6 +6,7 @@ use App\Models\Task_type;
 use App\Http\Requests\StoreTask_typeRequest;
 use App\Http\Requests\UpdateTask_typeRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Validator;
 
 class TaskTypeController extends Controller
