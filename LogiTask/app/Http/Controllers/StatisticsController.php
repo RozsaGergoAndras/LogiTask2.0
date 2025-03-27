@@ -27,7 +27,7 @@ class StatisticsController extends Controller
             JOIN users u ON t.worker = u.id
             WHERE t.state = 2
               AND t.state2Date BETWEEN ? AND ?
-            GROUP BY t.worker
+            GROUP BY t.worker, u.name
             ORDER BY task_count DESC
         ', [$request->startDate, $request->endDate]);
 
@@ -55,7 +55,7 @@ class StatisticsController extends Controller
               AND t.state1date IS NOT NULL
               AND t.state2date IS NOT NULL
               AND t.state2Date BETWEEN ? AND ?
-            GROUP BY t.worker
+            GROUP BY t.worker, u.name
             ORDER BY total_work_time DESC
         ', [$request->startDate, $request->endDate]);
 
@@ -81,7 +81,7 @@ class StatisticsController extends Controller
             JOIN users u ON t.worker = u.id
             WHERE t.state = 2
               AND t.state2Date BETWEEN ? AND ?
-            GROUP BY t.worker
+            GROUP BY t.worker, u.name
             ORDER BY avg_completion_time ASC
         ', [$request->startDate, $request->endDate]);
 
