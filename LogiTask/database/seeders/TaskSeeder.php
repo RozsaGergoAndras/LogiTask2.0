@@ -30,7 +30,7 @@ class TaskSeeder extends Seeder
             'state1date' => null,
             'state2date' => null,
             'task_type' => $taskType->id,
-            'description' => 'Description for Task 1',
+            'description' => 'GET 2:2',
         ]);
 
         Task::create([

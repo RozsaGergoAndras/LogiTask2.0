@@ -8,6 +8,7 @@ use App\Services\TaskDistributionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\Task;
@@ -33,10 +34,15 @@ class AuthenticatedSessionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['success'=>false, 'error' => $e->getMessage()], 400);
+        }
+        
 
         // Find the user by email
         $user = User::where('email', $request->email)->first();

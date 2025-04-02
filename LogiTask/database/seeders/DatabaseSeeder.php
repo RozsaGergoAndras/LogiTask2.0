@@ -28,6 +28,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Jani',
             'email' => 'jani@example.com',
         ]);
+        User::factory()->create([
+            'name' => 'Béla AI',
+            'email' => 'apiwizardagent@gmail.com',
+            'password' => 'Rtk6f3b9?API',
+        ]);
 
         $this->call([
             TaskSeeder::class,  // miután készek a teszt userek mehetnek a test taskok
