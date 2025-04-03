@@ -6,7 +6,7 @@ use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\User;
-use App\Models\Task_Contnet;
+use App\Models\Task_Content;
 use App\Services\TaskDistributionService;
 use Auth;
 use Illuminate\Http\Request;
@@ -35,7 +35,7 @@ class TaskController extends Controller
         if($task == null){
             return response()->json(["success" => false,'error' => 'No assigned task for worker!'], 404);
         }
-        $taskContents = TaskContent::where('task_id', $taskId)->get();
+        $taskContents = Task_Content::where('task_id', $task->id)->get();
         return response()->json(["success" => true, 'task' => $task, 'taskContents'=> $taskContents], 200);
     }
 
@@ -93,7 +93,9 @@ class TaskController extends Controller
         if($task->assigner != $user->id && $task->worker != $user->id && $user->role != 1){
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
-        return response()->json(["success" => true, 'task' => $task, 'taskContent'=> $task->taskContent()], 200);
+        
+        $taskContents = Task_Content::where('task_id', $task->id)->get();
+        return response()->json(["success" => true, 'task' => $task, 'taskContents'=> $taskContents], 200);
     }
 
     /**
