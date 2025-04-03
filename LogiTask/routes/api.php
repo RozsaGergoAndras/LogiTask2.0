@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::post('/tasktype/create', [TaskTypeController::class, 'store']);
     Route::delete('/tasktype/{id}', [TaskTypeController::class, 'destroy']);
 
-    //Route::get('/taskcontent/{id}', [TaskTypeController::class, 'index']);
+    //Route::get('/taskcontent/{id}', [TaskContentController::class, 'show']);
     Route::delete('/taskcontent/{id}', [TaskContentController::class, 'destroy']);
 
     Route::get('/roles', [RoleController::class, 'index']);
