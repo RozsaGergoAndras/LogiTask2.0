@@ -225,8 +225,19 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy(Request $request, $id)
     {
-        //
+        $task = Task::find($id);
+        $user = $user = auth('sanctum')->user();
+        //return errors
+        //return response()->json(["success" => false,'user'=> $user], 401);
+        if (!$task) {
+            return response()->json(["success" => false, 'error' => 'Task not found'], 404);
+        }
+        if($task->assigner != $user->id && $user->role != 1){
+            return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
+        }
+
+        $task->delete();
     }
 }
