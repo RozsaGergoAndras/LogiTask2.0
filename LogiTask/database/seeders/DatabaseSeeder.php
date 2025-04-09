@@ -33,6 +33,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'apiwizardagent@gmail.com',
             'password' => 'Rtk6f3b9?API',
         ]);
+        User::factory()->create([
+            'name' => 'Robot Hub',
+            'email' => 'robothub@example.com',
+            'password' => 'RobotHub1?',
+        ]);
 
         $this->call([
             TaskSeeder::class,  // miután készek a teszt userek mehetnek a test taskok

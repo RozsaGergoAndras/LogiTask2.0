@@ -24,12 +24,12 @@ class TaskSeeder extends Seeder
         // Create 3 tasks with the provided schema
         Task::create([
             'assigner' => $assigner->id,
-            'worker' => $worker->id,
+            'worker' => null,
             'state' => 0,  // Example state
             'state0date' => Carbon::now(),
             'state1date' => null,
             'state2date' => null,
-            'task_type' => $taskType->id,
+            'task_type' => 6,
             'description' => 'GET 2:2',
         ]);
 

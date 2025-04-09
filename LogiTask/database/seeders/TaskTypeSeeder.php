@@ -19,17 +19,31 @@ class TaskTypeSeeder extends Seeder
         // Create task types
         Task_type::create([
             'type_name' => 'Task For Workers',
-            'assignable_role' => $role->id,  // Assign the first role
+            'assignable_role' => 1,  // Assign the first role
+        ]);
+
+        Task_type::create([
+            'type_name' => 'Task For Mangement',
+            'assignable_role' => 2,
+        ]);
+
+        Task_type::create([
+            'type_name' => 'Task For Logistics Worker',
+            'assignable_role' => 3,
         ]);
 
         Task_type::create([
             'type_name' => 'Task For Administration',
-            'assignable_role' => $role->id,
+            'assignable_role' => 4,
         ]);
 
         Task_type::create([
             'type_name' => 'Task For Virtual Agents',
-            'assignable_role' => $role->id,
+            'assignable_role' => 5,
+        ]);
+        Task_type::create([
+            'type_name' => 'Task For Robots',
+            'assignable_role' => 6,
         ]);
     }
 }
