@@ -35,6 +35,8 @@ class TaskController extends Controller
         if($task == null){
             return response()->json(["success" => false,'error' => 'No assigned task for worker!'], 404);
         }
+        $task->assigner = $task->assigner();
+        $task->worker = $task->worker();
         $taskContents = Task_Content::where('task_id', $task->id)->get();
         return response()->json(["success" => true, 'task' => $task, 'taskContents'=> $taskContents], 200);
     }
@@ -94,8 +96,63 @@ class TaskController extends Controller
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
         
+        if($task->Assigner != null){
+            $task->assigner = $task->Assigner->name;
+        }        
+        if($task->Worker != null){
+            $task->worker = $task->Worker->name;
+        }
+           
         $taskContents = Task_Content::where('task_id', $task->id)->get();
         return response()->json(["success" => true, 'task' => $task, 'taskContents'=> $taskContents], 200);
+    }
+
+    public function GetTasksAsAuthor(Request $request){
+
+        try {
+            $request->validate([
+                'begin_date'=> 'required|date',
+                'end_date'=> 'required|date|after:begin_date',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['success'=> false,'error'=> $e->getMessage()],400);
+        }
+        
+
+        $user = auth('sanctum')->user();
+        $tasks = Task::where('assigner', $user->id) // Filter by the user's ID as the assinger
+                 //->whereNot('state', 2)
+                 ->whereBetween('created_at', [$request->begin_date, $request->end_date]) // Filter by date range
+                 ->get();
+
+        if($tasks == null){
+            return response()->json(["success" => false,'error' => 'No assigned task for worker!'], 404);
+        }
+        return response()->json(["success" => true, 'tasks' => $tasks], 200);
+    }
+
+    public function GetTasksAsWorker(Request $request){
+
+        try {
+            $request->validate([
+                'begin_date'=> 'required|date',
+                'end_date'=> 'required|date|after:begin_date',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['success'=> false,'error'=> $e->getMessage()],400);
+        }
+        
+
+        $user = auth('sanctum')->user();
+        $tasks = Task::where('worker', $user->id) // Filter by the user's ID as the assinger
+                 //->whereNot('state', 2)
+                 ->whereBetween('created_at', [$request->begin_date, $request->end_date]) // Filter by date range
+                 ->get();
+
+        if($tasks == null){
+            return response()->json(["success" => false,'error' => 'No assigned task for worker!'], 404);
+        }
+        return response()->json(["success" => true, 'tasks' => $tasks], 200);
     }
 
     /**

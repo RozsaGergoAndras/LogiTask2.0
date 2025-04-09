@@ -19,6 +19,8 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::get('/task/{id}', [TaskController::class, 'show'])->name('task.show');
     Route::post('/task/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::post('/task/create', [TaskController::class, 'store'])->name('task.store');
+    Route::get('/tasks/author', [TaskController::class,'GetTasksAsAuthor']);
+    Route::get('/tasks/worker', [TaskController::class,'GetTasksAsWorker']);
 
     Route::get('/tasktype', [TaskTypeController::class, 'index']);
     Route::get('/tasktype/{id}', [TaskTypeController::class, 'show']);
