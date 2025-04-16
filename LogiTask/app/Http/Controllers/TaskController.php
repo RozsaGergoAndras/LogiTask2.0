@@ -54,14 +54,19 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming request data
-        $validated = $request->validate([
-            'assigner' => 'required|exists:users,id',
-            'worker' => 'nullable|exists:users,id',
-            'state' => 'required|integer',
-            'task_type' => 'required|exists:task_types,id',
-            'description' => 'required|string|max:255',
+        try {
+            // Validate the incoming request data
+            $validated = $request->validate([
+                'assigner' => 'required|exists:users,id',
+                'worker' => 'nullable|exists:users,id',
+                'state' => 'required|integer',
+                'task_type' => 'required|exists:task_types,id',
+                'description' => 'required|string|max:255',
         ]);
+        } catch (ValidationException $e) {
+            return response()->json(["success" => false,'error' => $e->getMessage()], 404);
+        }
+        
 
         // Create a new task using the validated data
         $task = Task::create([
