@@ -54,31 +54,37 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        
         try {
             // Validate the incoming request data
             $validated = $request->validate([
                 'assigner' => 'required|exists:users,id',
                 'worker' => 'nullable|exists:users,id',
-                'state' => 'required|integer',
+                //'state' => 'required|integer',
                 'task_type' => 'required|exists:task_types,id',
                 'description' => 'required|string|max:255',
-        ]);
+            ]);
         } catch (ValidationException $e) {
             return response()->json(["success" => false,'error' => $e->getMessage()], 404);
         }
         
 
         // Create a new task using the validated data
-        $task = Task::create([
-            'assigner' => $validated['assigner'],
-            'worker' => $validated['worker'],
-            'state' => $validated['state'],
-            'state0date' => now(),
-            'state1date' => null,
-            'state2date' => null,
-            'task_type' => $validated['task_type'],
-            'description' => $validated['description'],
-        ]);
+        try {
+            $task = Task::create([
+                'assigner' => $validated['assigner'],
+                'worker' => $validated['worker'],
+                'state' => 0,//'state' => $validated['state'],
+                'state0date' => now(),
+                'state1date' => null,
+                'state2date' => null,
+                'task_type' => $validated['task_type'],
+                'description' => $validated['description'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success'=> false,'error'=> $e->getMessage()],404);
+        }
+        
 
         // Return a success response
         return response()->json([
@@ -173,6 +179,8 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
+        return response()->json(["success" => false,'error' => "GECIIIIIIIII"], 404);
+
         $task = Task::find($id);
         $user = $user = auth('sanctum')->user();
         //return errors

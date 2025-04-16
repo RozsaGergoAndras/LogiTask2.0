@@ -18,7 +18,7 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::get('/task', [TaskController::class, 'index'])->name('task.index');
     Route::get('/task/{id}', [TaskController::class, 'show'])->name('task.show');
     Route::post('/task/{id}', [TaskController::class, 'update'])->name('task.update');
-    Route::post('/task/create', [TaskController::class, 'store'])->name('task.store');
+    Route::post('/task/create/new', [TaskController::class, 'store'])->name('task.store');
     Route::delete('/task/{id}', [TaskController::class,'destroy']);
     Route::get('/tasks/author', [TaskController::class,'GetTasksAsAuthor']);
     Route::get('/tasks/worker', [TaskController::class,'GetTasksAsWorker']);
@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::get('/tasktype', [TaskTypeController::class, 'index']);
     Route::get('/tasktype/{id}', [TaskTypeController::class, 'show']);
     Route::post('/tasktype/{id}', [TaskTypeController::class, 'update']);
-    Route::post('/tasktype/create', [TaskTypeController::class, 'store']);
+    Route::post('/tasktype/create/new', [TaskTypeController::class, 'store']);
     Route::delete('/tasktype/{id}', [TaskTypeController::class, 'destroy']);
 
     //Route::get('/taskcontent/{id}', [TaskContentController::class, 'show']);
