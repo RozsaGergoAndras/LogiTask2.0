@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\Task_type;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -53,5 +54,29 @@ class Regger extends Controller
         ]);*/
 
         return response()->json(['success'=>true, 'message' => 'User created!'], 200);
+    }
+
+    public function users(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'task_type_id' => 'required|integer|exists:task_types,id',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        }
+
+        $taskType = Task_type::find($validated['task_type_id']);
+
+        if (!$taskType || !$taskType->assignable_role) {
+            return response()->json(['message' => 'Assignable role not found for this task type.'], 404);
+        }
+
+        $users = User::where('role', $taskType->assignable_role)->get();
+
+        return response()->json($users);
     }
 }

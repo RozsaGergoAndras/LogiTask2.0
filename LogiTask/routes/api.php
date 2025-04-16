@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     Route::get('/user', function (Request $request) {
         return auth('sanctum')->user(); // For getting the authenticated user info
     });
+
+    Route::post('/users', [Regger::class,'users']);
     
     Route::post('/user/create', [Regger::class, 'store']);
 
