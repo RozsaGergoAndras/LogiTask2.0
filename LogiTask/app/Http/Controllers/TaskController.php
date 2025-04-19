@@ -179,8 +179,6 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response()->json(["success" => false,'error' => "GECIIIIIIIII"], 404);
-
         $task = Task::find($id);
         $user = $user = auth('sanctum')->user();
         //return errors
