@@ -25,7 +25,7 @@ class Task extends Model
         'description',
     ];
 
-    public function task_type()
+    public function taskType()
     {
         return $this->belongsTo(Task_type::class, 'task_type');
     }

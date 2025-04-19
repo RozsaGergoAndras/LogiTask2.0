@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Taskcontent;
 use App\Models\Tasks;
 use App\Models\User;
+use App\Models\Task_type;
 use Carbon\Carbon;
 use DB;
 
@@ -40,17 +41,17 @@ class TaskDistributionService
             $workers =[];
             switch ($taskDistributionMode) {
                 case 'FIRST_FREE':
-                    $workers = $this->GetAllocatableWorkers($task->task_type());
+                    $workers = $this->GetAllocatableWorkers($task->task_type);
                     break;
                 case 'TASK_COUNT_BALANCED':
-                    $workers = $this->GetAllocatableWorkersBalancedSql($task->task_type());
+                    $workers = $this->GetAllocatableWorkersBalancedSql($task->task_type);
                     break;
                 case 'TASK_TIME_BALANCED':
-                    $workers = $this->GetAllocatableWorkersTimeBalanced($task->task_type());
+                    $workers = $this->GetAllocatableWorkersTimeBalanced($task->task_type);
                     break;
                 
                 default: #FIRST_FREE
-                    $workers = $this->GetAllocatableWorkers($task->task_type());
+                    $workers = $this->GetAllocatableWorkers($task->task_type);
                     break;
             }
 
@@ -66,14 +67,16 @@ class TaskDistributionService
     }
 
     public function GetAllocatableWorkers($tasktype){
+        $tasktype = Task_type::where('id', $tasktype)->first();
         //$assignableWorkers = User::where('role', $tasktype->assignableRole)->get();
-        $assignableWorkers = User::where('role', $tasktype->assignableRole)
+        $assignableWorkers = User::where('role', $tasktype->assignable_role)
                          ->where('user_state', 2)
                          ->get();
         return $assignableWorkers;
     }
 
     public function GetAllocatableWorkersBalanced($tasktype){
+        $tasktype = Task_type::where('id', $tasktype)->first();
         // Get the workers with the given role and state (active)
         $assignableWorkers = User::where('role', $tasktype->assignableRole)
                                  ->where('user_state', 2)
@@ -102,6 +105,7 @@ class TaskDistributionService
     }
 
     public function GetAllocatableWorkersBalancedSql($tasktype){
+        $tasktype = Task_type::where('id', $tasktype)->first();
         // Get the date 30 days ago
         $thirtyDaysAgo = Carbon::now()->subDays(30)->toDateString();  // Get date as a string in 'Y-m-d' format
     
