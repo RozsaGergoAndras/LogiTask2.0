@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Regger;
@@ -46,8 +47,8 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
     });
 
     Route::post('/users', [Regger::class,'users']);
-    
     Route::post('/user/create', [Regger::class, 'store']);
+    Route::put('password', [PasswordController::class, 'update']);
 
 
     Route::get('/statistics/worker/compleated-task', [StatisticsController::class, 'GetWorkerActivity']);
