@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->middleware([LogApiAccess::class])->group(func
 
     Route::post('/users', [Regger::class,'users']);
     Route::post('/user/create', [Regger::class, 'store']);
-    Route::put('password', [PasswordController::class, 'update']);
+    Route::post('/user/password', [PasswordController::class, 'update']);
 
 
     Route::get('/statistics/worker/compleated-task', [StatisticsController::class, 'GetWorkerActivity']);
