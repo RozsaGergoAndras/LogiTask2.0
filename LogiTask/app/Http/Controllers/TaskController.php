@@ -250,5 +250,6 @@ class TaskController extends Controller
         }
 
         $task->delete();
+        return response()->json(['success'=> true,'message'=> 'Task deleted'],200);
     }
 }
