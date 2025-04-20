@@ -34,7 +34,7 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        auth('sanctum')->user()->update([
             'password' => Hash::make($validated['password']),
         ]);
 
