@@ -245,7 +245,7 @@ class TaskController extends Controller
         if (!$task) {
             return response()->json(["success" => false, 'error' => 'Task not found'], 404);
         }
-        if($task->assigner != $user->id && $user->role != 1){
+        if($task->assigner != $user->id ){//|| $user->role = 1
             return response()->json(["success" => false,'error' => 'Unauthorized Access!'], 401);
         }
 
