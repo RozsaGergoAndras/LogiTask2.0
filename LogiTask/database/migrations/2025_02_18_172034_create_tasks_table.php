@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('state2date')->nullable();
             $table->string('result')->nullable();
             $table->unsignedBigInteger('task_type');
-            $table->string('description');
+            $table->text('description');
             $table->SoftDeletes();
             //Kapcsolatok
             $table->foreign('assigner')->references('id')->on('users')->onDelete('cascade');

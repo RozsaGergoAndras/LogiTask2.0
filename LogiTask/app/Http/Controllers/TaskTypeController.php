@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTask_typeRequest;
 use App\Http\Requests\UpdateTask_typeRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Validator;
 
 class TaskTypeController extends Controller
@@ -33,13 +34,27 @@ class TaskTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        
+        /*$validator = Validator::make($request->all(), [
             'type_name' => 'required|string|max:255|min:1',
             'assignable_role' => 'required|exists:roles,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json(["success" => false, 'error' => $validator->errors()], 422);
+        }*/
+        try {
+            $request->validate([
+                'type_name' => 'required|string|max:255|min:1',
+                'assignable_role' => 'required|exists:roles,id',
+            ]);
+        
+        
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->errors()
+            ], 400);
         }
 
         $taskType = Task_type::create([

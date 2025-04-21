@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('user_agent');
             $table->string('route');
             $table->string('method');
-            $table->string('request_data');
+            $table->text('request_data');
             $table->unsignedBigInteger('user_id');
             //Kapcsolatok
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
