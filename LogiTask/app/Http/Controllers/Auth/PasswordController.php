@@ -32,13 +32,16 @@ class PasswordController extends Controller
     {
         try {
             $validated = $request->validateWithBag('updatePassword', [
-                'current_password' => ['required', 'current_password'],
+                'current_password' => ['required'/*, 'current_password'*/],
                 'password' => ['required', Password::defaults(), 'confirmed'],
             ]);
         } catch (ValidationException $e) {
-            return response()->json(['success'=> false,'error'=> $e->getMessage()],status: 200);
+            return response()->json(['success'=> false,'error'=> $e->errors()],status: 200);
         }
         
+        if(!Hash::check($request->current_password, auth('sanctum')->user()->password)){
+            return response()->json(['success'=> false,'error'=> 'Password incorrect!'],status: 200);
+        }
 
         auth('sanctum')->user()->update([
             'password' => Hash::make($validated['password']),
